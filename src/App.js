@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Line, Bar } from 'react-chartjs-2';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Line, Bar } from "react-chartjs-2";
 import FinancialDataTable from "./components/FinancialDataTable";
 import "./App.css";
 
@@ -14,7 +14,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
 ChartJS.register(
   CategoryScale,
@@ -30,67 +30,99 @@ ChartJS.register(
 function App() {
   const [financialData, setFinancialData] = useState({
     labels: [],
-    datasets: []
+    datasets: [],
   });
-  const [error, setError] = useState('');
-  const [chartType, setChartType] = useState('line');
+  const [error, setError] = useState("");
+  const [chartType, setChartType] = useState("line");
   const [showDataTable, setShowDataTable] = useState(false);
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
-
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
   useEffect(() => {
-    localStorage.setItem('theme', theme);
+    localStorage.setItem("theme", theme);
     document.body.className = theme;
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme(theme === "light" ? "dark" : "light");
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // V6ZSRQWS2AMUTLX7
-        const incomeStatementResponse = await axios.get(`https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=IBM&apikey=demo`);
-        const balanceSheetResponse = await axios.get(`https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=IBM&apikey=demo`);
+        // API key: V6ZSRQWS2AMUTLX7
+        const incomeStatementResponse = await axios.get(
+          `https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=IBM&apikey=demo`
+        );
+        const balanceSheetResponse = await axios.get(
+          `https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=IBM&apikey=demo`
+        );
 
-        const netIncome = incomeStatementResponse?.data?.quarterlyReports?.map(report => report.netIncome) || [];
-        const totalRevenue = incomeStatementResponse?.data?.quarterlyReports?.map(report => report.totalRevenue) || [];
-        const shareholderEquity = balanceSheetResponse?.data?.quarterlyReports?.map(report => report.totalShareholderEquity) || [];
-        const labels = incomeStatementResponse?.data?.quarterlyReports?.map(report => report.fiscalDateEnding) || [];
+        const netIncome =
+          incomeStatementResponse?.data?.quarterlyReports?.map(
+            (report) => report.netIncome
+          ) || [];
+        const totalRevenue =
+          incomeStatementResponse?.data?.quarterlyReports?.map(
+            (report) => report.totalRevenue
+          ) || [];
+        const shareholderEquity =
+          balanceSheetResponse?.data?.quarterlyReports?.map(
+            (report) => report.totalShareholderEquity
+          ) || [];
+        const labels =
+          incomeStatementResponse?.data?.quarterlyReports?.map(
+            (report) => report.fiscalDateEnding
+          ) || [];
 
         setFinancialData({
           labels,
           datasets: [
             {
-              label: 'Net Income',
+              label: "Net Income",
               data: netIncome,
               fill: false,
-              borderColor: 'rgb(75, 192, 192)',
-              backgroundColor: netIncome.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.5)`),
-              tension: 0.1
+              borderColor: "rgb(75, 192, 192)",
+              backgroundColor: netIncome.map(
+                () =>
+                  `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
+                    Math.random() * 255
+                  )}, ${Math.floor(Math.random() * 255)}, 0.5)`
+              ),
+              tension: 0.1,
             },
             {
-              label: 'Total Revenue',
+              label: "Total Revenue",
               data: totalRevenue,
               fill: false,
-              borderColor: 'rgb(53, 162, 235)',
-              backgroundColor: totalRevenue.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.5)`),
-              tension: 0.1
+              borderColor: "rgb(53, 162, 235)",
+              backgroundColor: totalRevenue.map(
+                () =>
+                  `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
+                    Math.random() * 255
+                  )}, ${Math.floor(Math.random() * 255)}, 0.5)`
+              ),
+              tension: 0.1,
             },
             {
-              label: 'Shareholder Equity',
+              label: "Shareholder Equity",
               data: shareholderEquity,
               fill: false,
-              borderColor: 'rgb(255, 99, 132)',
-              backgroundColor: shareholderEquity.map(() => `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, 0.5)`),
-              tension: 0.1
-            }
-          ]
+              borderColor: "rgb(255, 99, 132)",
+              backgroundColor: shareholderEquity.map(
+                () =>
+                  `rgba(${Math.floor(Math.random() * 255)}, ${Math.floor(
+                    Math.random() * 255
+                  )}, ${Math.floor(Math.random() * 255)}, 0.5)`
+              ),
+              tension: 0.1,
+            },
+          ],
         });
       } catch (error) {
-        setError('There was an error fetching the financial data. Please refresh the page.');
-        console.error('fetchData error: ', error);
+        setError(
+          "There was an error fetching the financial data. Please refresh the page."
+        );
+        console.error("fetchData error: ", error);
       }
     };
 
@@ -103,14 +135,17 @@ function App() {
       <button onClick={toggleTheme}>
         {theme === "light" ? "Dark mode" : "Light mode"}
       </button>
-      {
-        error ? (
-          <div style={{ color: 'red' }}>{error}</div>
-        ) : 
+      {error ? (
+        <div style={{ color: "red" }}>{error}</div>
+      ) : (
         <>
           <div>
             <label htmlFor="chartTypeSelect">Select Chart Type: </label>
-            <select id="chartTypeSelect" value={chartType} onChange={(e) => setChartType(e.target.value)}>
+            <select
+              id="chartTypeSelect"
+              value={chartType}
+              onChange={(e) => setChartType(e.target.value)}
+            >
               <option value="line">Line</option>
               <option value="bar">Bar</option>
             </select>
@@ -124,25 +159,29 @@ function App() {
               onChange={() => setShowDataTable(!showDataTable)}
             />
           </div>
-          {chartType === 'line' ? (
+          {chartType === "line" ? (
             <Line data={financialData} />
           ) : (
             <Bar data={financialData} />
           )}
-          {
-            showDataTable &&
-            <FinancialDataTable 
-              data={financialData.datasets.length > 0 ? financialData.datasets[0].data.map((value, index) => ({
-                fiscalDateEnding: financialData.labels[index],
-                netIncome: financialData.datasets[0].data[index],
-                totalRevenue: financialData.datasets[1].data[index],
-                totalShareholderEquity: financialData.datasets[2].data[index],
-                })) : []}
+          {showDataTable && (
+            <FinancialDataTable
+              data={
+                financialData.datasets.length > 0
+                  ? financialData.datasets[0].data.map((value, index) => ({
+                      fiscalDateEnding: financialData.labels[index],
+                      netIncome: financialData.datasets[0].data[index],
+                      totalRevenue: financialData.datasets[1].data[index],
+                      totalShareholderEquity:
+                        financialData.datasets[2].data[index],
+                    }))
+                  : []
+              }
               theme={theme}
             />
-          }
+          )}
         </>
-      }
+      )}
     </div>
   );
 }
