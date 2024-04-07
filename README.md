@@ -21,7 +21,6 @@ This project is a React application that fetches historical quarterly financial 
 
 ## Additional Features or Improvements
 
-- **Dynamic Stock Symbol Search:** Users can search for and select the stock symbol of their interest, enhancing user interaction and flexibility.
 - **Chart Type Selection:** Provides an option to select between different chart types (e.g., Line, Bar), allowing users to view the data in various formats.
 - **Data Table View:** Alongside the chart, the application presents the data in a tabular format, making it easy to read specific values.
 - **Dark Mode:** Includes a dark mode feature, reducing eye strain and improving accessibility for users in low-light environments.
